@@ -21,7 +21,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className={cn("font-sans", figtree.variable)}>
-      <body className="bg-white">
+      <body className="bg-background">
         <AuthSessionProvider>
           <QueryProvider>
             <AdminLayoutShell>{children}</AdminLayoutShell>

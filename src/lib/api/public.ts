@@ -1,5 +1,10 @@
 import { publicApi } from "./client";
-import type { BibleVersion, DashboardStats } from "./types";
+import type { BibleVersion, DashboardStats, PlanCategory } from "./types";
+
+export async function fetchPlanCategories(): Promise<PlanCategory[]> {
+  const { data } = await publicApi.get<PlanCategory[]>("/bible-plans/categories");
+  return data;
+}
 
 export async function fetchBibleVersions(): Promise<BibleVersion[]> {
   const { data } = await publicApi.get<BibleVersion[]>("/bible-versions");

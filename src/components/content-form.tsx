@@ -77,3 +77,38 @@ export function FormField({
     </div>
   );
 }
+
+export function FormSelect({
+  label,
+  name,
+  defaultValue,
+  required,
+  options,
+}: {
+  label: string;
+  name: string;
+  defaultValue?: string;
+  required?: boolean;
+  options: Array<{ value: string; label: string }>;
+}) {
+  return (
+    <div className="space-y-1">
+      <label className="text-sm font-medium" htmlFor={name}>
+        {label}
+      </label>
+      <select
+        id={name}
+        name={name}
+        defaultValue={defaultValue}
+        required={required}
+        className="w-full rounded-lg border border-input bg-white px-3 py-2 text-sm"
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}

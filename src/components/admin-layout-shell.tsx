@@ -1,9 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { AppSidebar } from "@/components/app-sidebar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -12,9 +21,32 @@ import {
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
+const pageTitles: Record<string, string> = {
+  "/": "Tableau de bord",
+  "/devotionals": "Dévotions",
+  "/plans": "Plans bibliques",
+  "/meditations": "Méditations",
+  "/users": "Utilisateurs",
+  "/versions": "Versions Bible",
+  "/subscriptions": "Abonnements",
+  "/subscription-plans": "Tarifs",
+  "/login": "Connexion",
+};
+
+function getPageTitle(pathname: string) {
+  if (pageTitles[pathname]) return pageTitles[pathname];
+
+  const match = Object.entries(pageTitles)
+    .filter(([path]) => path !== "/")
+    .find(([path]) => pathname.startsWith(path));
+
+  return match?.[1] ?? "Administration";
+}
+
 export function AdminLayoutShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isLogin = pathname === "/login";
+  const pageTitle = getPageTitle(pathname);
 
   if (isLogin) {
     return <>{children}</>;
@@ -22,13 +54,38 @@ export function AdminLayoutShell({ children }: { children: ReactNode }) {
 
   return (
     <TooltipProvider>
-      <SidebarProvider>
+      <SidebarProvider defaultOpen={false}>
         <AppSidebar />
-        <SidebarInset className="bg-white">
-          <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
-            <SidebarTrigger className="-ml-1 rounded-lg" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <span className="text-sm font-medium text-muted-foreground">Administration</span>
+        <SidebarInset className="bg-background">
+          <header className="flex h-14 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+            <div className="flex min-w-0 flex-1 items-center gap-2 px-4">
+              <SidebarTrigger className="-ml-1 rounded-lg" />
+              <Separator
+                orientation="vertical"
+                className="mr-2 data-[orientation=vertical]:h-4"
+              />
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem className="hidden md:block">
+                    <BreadcrumbLink asChild>
+                      <Link href="/">Administration</Link>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  {pathname !== "/" ? (
+                    <>
+                      <BreadcrumbSeparator className="hidden md:block" />
+                      <BreadcrumbItem>
+                        <BreadcrumbPage>{pageTitle}</BreadcrumbPage>
+                      </BreadcrumbItem>
+                    </>
+                  ) : (
+                    <BreadcrumbItem className="md:hidden">
+                      <BreadcrumbPage>{pageTitle}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  )}
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
           </header>
           <div className="flex-1 overflow-auto">{children}</div>
         </SidebarInset>

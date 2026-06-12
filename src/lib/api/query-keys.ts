@@ -12,6 +12,7 @@ export const queryKeys = {
   },
   plans: {
     all: ["plans"] as const,
+    categories: ["plans", "categories"] as const,
     detail: (id: string) => ["plans", id] as const,
     days: (planId: string) => ["plans", planId, "days"] as const,
   },

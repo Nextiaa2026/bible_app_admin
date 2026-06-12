@@ -33,11 +33,11 @@ export function FormSheet({
       <SheetContent
         side="right"
         className={cn(
-          "flex w-full flex-col gap-0 overflow-y-auto rounded-l-lg border-l bg-white p-0 sm:max-w-xl lg:max-w-2xl",
+          "flex h-full w-full max-w-none flex-col gap-0 overflow-hidden border-l bg-background p-0 sm:max-w-none",
           className,
         )}
       >
-        <SheetHeader className="border-b px-6 py-5">
+        <SheetHeader className="shrink-0 border-b px-6 py-5">
           <SheetTitle className="text-lg font-semibold">{title}</SheetTitle>
           {description ? <SheetDescription>{description}</SheetDescription> : null}
         </SheetHeader>

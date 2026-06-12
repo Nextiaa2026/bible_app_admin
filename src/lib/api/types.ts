@@ -53,6 +53,12 @@ export type PlanDay = {
   readings: Array<{ book: string; chapterStart: number }>;
 };
 
+export type PlanCategory = {
+  id: string;
+  labelFr: string;
+  labelEn: string;
+};
+
 export type DashboardStats = {
   devotionals: number;
   plans: number;
