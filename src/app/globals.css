@@ -1,0 +1,93 @@
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Matches `app/global.css` — Le Guide du Chrétien mobile theme */
+@layer base {
+  .theme {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+  }
+
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 258 25% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 258 25% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 258 25% 15%;
+    --primary: 258 41% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 258 35% 96%;
+    --secondary-foreground: 258 30% 30%;
+    --muted: 258 20% 96%;
+    --muted-foreground: 258 10% 45%;
+    --accent: 258 30% 96%;
+    --accent-foreground: 258 41% 45%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 258 15% 90%;
+    --input: 258 15% 90%;
+    --ring: 258 41% 58%;
+    --surface-dark: 258 22% 16%;
+    --radius: 0.5rem;
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 258 25% 15%;
+    --sidebar-primary: 258 41% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 258 30% 96%;
+    --sidebar-accent-foreground: 258 41% 45%;
+    --sidebar-border: 258 15% 90%;
+    --sidebar-ring: 258 41% 58%;
+    --chart-1: 258 41% 58%;
+    --chart-2: 258 35% 70%;
+    --chart-3: 258 25% 45%;
+    --chart-4: 258 20% 35%;
+    --chart-5: 258 15% 25%;
+  }
+
+  .dark {
+    --background: 258 20% 8%;
+    --foreground: 0 0% 98%;
+    --card: 258 18% 12%;
+    --card-foreground: 0 0% 98%;
+    --popover: 258 18% 12%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 258 45% 68%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 258 15% 18%;
+    --secondary-foreground: 258 20% 90%;
+    --muted: 258 12% 16%;
+    --muted-foreground: 258 10% 60%;
+    --accent: 258 25% 20%;
+    --accent-foreground: 258 45% 75%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 258 12% 20%;
+    --input: 258 12% 20%;
+    --ring: 258 45% 68%;
+    --surface-dark: 258 20% 10%;
+    --sidebar: 258 18% 12%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 258 45% 68%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 258 25% 20%;
+    --sidebar-accent-foreground: 258 45% 75%;
+    --sidebar-border: 258 12% 20%;
+    --sidebar-ring: 258 45% 68%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    @apply bg-white text-foreground antialiased;
+  }
+
+  html {
+    @apply font-sans;
+  }
+}
