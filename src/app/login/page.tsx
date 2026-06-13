@@ -64,11 +64,6 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-white p-6">
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5">
-        <div>
-          <h1 className="text-xl font-bold">Administration</h1>
-          <p className="text-sm text-muted-foreground">Le Guide du Chrétien</p>
-        </div>
-
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="email">
             Email

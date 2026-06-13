@@ -31,12 +31,14 @@ function attachErrorInterceptor(instance: AxiosInstance) {
 export const publicApi = axios.create({
   baseURL: API_URL,
   headers: { "Content-Type": "application/json" },
+  timeout: 10_000,
 });
 attachErrorInterceptor(publicApi);
 
 export const adminApi = axios.create({
   baseURL: `${API_URL}/admin`,
   headers: { "Content-Type": "application/json" },
+  timeout: 15_000,
 });
 
 adminApi.interceptors.request.use(async (config) => {
@@ -51,6 +53,7 @@ attachErrorInterceptor(adminApi);
 /** Multipart uploads — no default JSON content-type. */
 export const adminUploadApi = axios.create({
   baseURL: `${API_URL}/admin`,
+  timeout: 60_000,
 });
 
 adminUploadApi.interceptors.request.use(async (config) => {

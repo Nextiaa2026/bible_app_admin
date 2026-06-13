@@ -16,10 +16,10 @@ export function QueryState({ isLoading, isError, error, children, skeleton }: Qu
   if (isLoading) {
     return (
       skeleton ?? (
-        <div className="space-y-3">
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton key={index} className="h-36 w-full rounded-lg" />
+          ))}
         </div>
       )
     );

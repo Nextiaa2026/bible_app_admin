@@ -42,7 +42,7 @@ const columns: ColumnDef<BiblePlanRow>[] = [
       const url = row.getValue("thumbnailUrl") as string | null | undefined;
       return url ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={url} alt="" className="h-8 w-8 rounded object-cover" />
+        <img src={url} alt="" className="h-8 w-8 rounded-lg object-cover" />
       ) : (
         <span className="text-muted-foreground">—</span>
       );

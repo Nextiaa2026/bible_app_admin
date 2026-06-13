@@ -33,13 +33,13 @@
     --ring: 258 41% 58%;
     --surface-dark: 258 22% 16%;
     --radius: 0.5rem;
-    --sidebar: 258 22% 16%;
-    --sidebar-foreground: 258 15% 92%;
+    --sidebar: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 258 41% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 258 25% 22%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 258 18% 24%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 258 41% 58%;
     --chart-1: 258 41% 58%;
     --chart-2: 258 35% 70%;

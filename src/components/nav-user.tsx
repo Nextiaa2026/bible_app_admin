@@ -20,9 +20,9 @@ export function NavUser() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton size="lg" className="cursor-default hover:bg-transparent active:bg-transparent">
+        <SidebarMenuButton size="lg" tooltip={name} className="cursor-default hover:bg-transparent active:bg-transparent">
           <Avatar className="h-8 w-8 rounded-lg">
-            <AvatarFallback className="rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+            <AvatarFallback className="rounded-lg bg-sidebar-primary text-sidebar-primary-foreground text-xs font-semibold">
               {initials}
             </AvatarFallback>
           </Avatar>

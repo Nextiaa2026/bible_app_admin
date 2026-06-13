@@ -6,7 +6,6 @@ import type { ComponentType, SVGProps } from "react";
 
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -18,12 +17,11 @@ export type NavMainItem = {
   icon: ComponentType<SVGProps<SVGSVGElement>>;
 };
 
-export function NavMain({ items, label = "Navigation" }: { items: NavMainItem[]; label?: string }) {
+export function NavMain({ items }: { items: NavMainItem[] }) {
   const pathname = usePathname();
 
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>{label}</SidebarGroupLabel>
+    <SidebarGroup className="px-2 py-1">
       <SidebarMenu>
         {items.map((item) => {
           const active =

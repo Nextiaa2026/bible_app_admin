@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, CalendarDays, Headphones, Sparkles } from "lucide-react";
 
-import { AdminShell } from "@/components/admin-shell";
 import { QueryState } from "@/components/query-state";
 import { Badge } from "@/components/ui/badge";
 import { useDashboardStats } from "@/hooks/use-admin-queries";
@@ -43,7 +42,7 @@ export default function DashboardPage() {
   const { data: stats, isLoading, isError, error } = useDashboardStats();
 
   return (
-    <AdminShell title="Tableau de bord" description="Gérez le contenu de l'application mobile">
+    <div className="mx-auto w-full max-w-7xl p-6 lg:p-8">
       <QueryState isLoading={isLoading} isError={isError} error={error}>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {cards.map(({ label, valueKey, href, icon: Icon, badge }) => (
@@ -82,6 +81,6 @@ export default function DashboardPage() {
           </li>
         </ul>
       </div>
-    </AdminShell>
+    </div>
   );
 }

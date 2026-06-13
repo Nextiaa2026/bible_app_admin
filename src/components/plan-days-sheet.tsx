@@ -38,7 +38,7 @@ export function PlanDaysSheet({ planId, planName, open, onOpenChange }: PlanDays
         }}
         title={`Jours — ${planName ?? "Plan"}`}
         description={`${days.length} jour(s) configuré(s)`}
-        className="sm:max-w-2xl lg:max-w-3xl"
+        wide
       >
         <div className="mb-4 flex justify-end">
           <Button type="button" size="sm" onClick={() => setAddOpen(true)}>
