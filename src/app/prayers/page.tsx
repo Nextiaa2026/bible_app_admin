@@ -1,29 +1,29 @@
 "use client";
 
 import { AdminShell } from "@/components/admin-shell";
-import { DevotionalFormFields } from "@/components/forms/devotional-form-fields";
+import { PrayerFormFields } from "@/components/forms/prayer-form-fields";
 import { FormSheet } from "@/components/form-sheet";
 import { QueryState } from "@/components/query-state";
-import { DevotionalsTable, type DevotionalRow } from "@/components/tables/devotionals-table";
+import { PrayersTable, type PrayerRow } from "@/components/tables/prayers-table";
 import { Button } from "@/components/ui/button";
 import {
-  useCreateDevotional,
+  useCreateDailyPrayer,
   useDeleteDevotional,
-  useUpdateDevotional,
+  useUpdateDailyPrayer,
 } from "@/hooks/use-admin-mutations";
 import { useDevotional, useDevotionals } from "@/hooks/use-admin-queries";
 import { useState } from "react";
 
-export default function DevotionalsPage() {
+export default function PrayersPage() {
   const { data, isLoading, isError, error } = useDevotionals();
   const deleteMutation = useDeleteDevotional();
-  const rows = (data ?? []) as DevotionalRow[];
+  const rows = (data ?? []) as PrayerRow[];
 
   const [sheetOpen, setSheetOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
 
-  const create = useCreateDevotional();
-  const update = useUpdateDevotional(editId ?? "");
+  const create = useCreateDailyPrayer();
+  const update = useUpdateDailyPrayer(editId ?? "");
   const { data: editData } = useDevotional(editId ?? "");
 
   function openCreate() {
@@ -49,11 +49,11 @@ export default function DevotionalsPage() {
   return (
     <>
       <AdminShell
-        description={`${rows.length} dévotion(s)`}
-        action={<Button onClick={openCreate}>Nouvelle dévotion</Button>}
+        description={`${rows.length} entrée(s)`}
+        action={<Button onClick={openCreate}>Nouvelle prière</Button>}
       >
         <QueryState isLoading={isLoading} isError={isError} error={error}>
-          <DevotionalsTable
+          <PrayersTable
             data={rows}
             onEdit={(row) => openEdit(row.id)}
             onDelete={(row) => deleteMutation.mutate(row.id)}
@@ -68,18 +68,18 @@ export default function DevotionalsPage() {
           setSheetOpen(open);
           if (!open) setEditId(null);
         }}
-        title={editId ? "Modifier la dévotion" : "Nouvelle dévotion"}
-        description="Remplissez les champs ci-dessous pour publier une dévotion."
+        title={editId ? "Modifier la prière" : "Nouvelle prière du jour"}
+        description="Choisissez une date, une écriture optionnelle et rédigez la prière."
       >
         {editId && !editData ? (
           <p className="text-sm text-muted-foreground">Chargement…</p>
         ) : (
-          <DevotionalFormFields
+          <PrayerFormFields
             key={editId ?? "new"}
             onSubmit={handleSubmit}
             isPending={create.isPending || update.isPending}
             defaultValues={editId ? editData : undefined}
-            submitLabel={editId ? "Mettre à jour" : "Créer"}
+            submitLabel={editId ? "Mettre à jour" : "Publier"}
           />
         )}
       </FormSheet>

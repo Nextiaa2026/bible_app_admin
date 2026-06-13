@@ -1,7 +1,10 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { Badge } from "@/components/ui/badge";
 import { DataTable, DataTableColumnHeader, type ColumnDef } from "@/components/ui/data-table";
+import { actionsColumn } from "@/lib/table-actions-column";
 
 export type MeditationRow = {
   id: string;
@@ -9,11 +12,19 @@ export type MeditationRow = {
   description: string | null;
   durationSec: number;
   category: string;
+  isPremium?: boolean;
   audioUrl?: string | null;
   thumbnailUrl?: string | null;
 };
 
-const columns: ColumnDef<MeditationRow>[] = [
+type MeditationsTableProps = {
+  data: MeditationRow[];
+  onEdit?: (row: MeditationRow) => void;
+  onDelete?: (row: MeditationRow) => void;
+  deletingId?: string | null;
+};
+
+const baseColumns: ColumnDef<MeditationRow>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Titre" />,
@@ -32,6 +43,16 @@ const columns: ColumnDef<MeditationRow>[] = [
     accessorKey: "category",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Catégorie" />,
     cell: ({ row }) => <Badge variant="outline">{row.getValue("category")}</Badge>,
+  },
+  {
+    accessorKey: "isPremium",
+    header: "Premium",
+    cell: ({ row }) =>
+      row.original.isPremium ? (
+        <Badge variant="default">Oui</Badge>
+      ) : (
+        <span className="text-muted-foreground">Non</span>
+      ),
   },
   {
     accessorKey: "thumbnailUrl",
@@ -63,7 +84,33 @@ const columns: ColumnDef<MeditationRow>[] = [
   },
 ];
 
-export function MeditationsTable({ data }: { data: MeditationRow[] }) {
+export function MeditationsTable({
+  data,
+  onEdit,
+  onDelete,
+  deletingId,
+}: MeditationsTableProps) {
+  const columns = useMemo(() => {
+    if (!onEdit && !onDelete) return baseColumns;
+
+    return [
+      ...baseColumns,
+      actionsColumn<MeditationRow>((row) => [
+        ...(onEdit ? [{ label: "Modifier", onClick: () => onEdit(row) }] : []),
+        ...(onDelete
+          ? [
+              {
+                label: deletingId === row.id ? "Suppression…" : "Supprimer",
+                onClick: () => onDelete(row),
+                variant: "destructive" as const,
+                disabled: deletingId === row.id,
+              },
+            ]
+          : []),
+      ]),
+    ];
+  }, [onEdit, onDelete, deletingId]);
+
   return (
     <DataTable
       columns={columns}

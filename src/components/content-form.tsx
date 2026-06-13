@@ -3,6 +3,7 @@
 import type { FormEvent, ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useUploadState } from "@/providers/upload-provider";
 
 type ContentFormProps = {
   onSubmit: (formData: FormData) => Promise<unknown>;
@@ -19,17 +20,22 @@ export function ContentForm({
   isPending = false,
   error,
 }: ContentFormProps) {
+  const { isUploading } = useUploadState();
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (isUploading) return;
     await onSubmit(new FormData(e.currentTarget));
   }
+
+  const disabled = isPending || isUploading;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {error ? <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p> : null}
       {children}
-      <Button type="submit" disabled={isPending} className="w-full">
-        {isPending ? "Enregistrement…" : submitLabel}
+      <Button type="submit" disabled={disabled} className="w-full">
+        {isUploading ? "Upload en cours…" : isPending ? "Enregistrement…" : submitLabel}
       </Button>
     </form>
   );

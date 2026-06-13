@@ -1,7 +1,10 @@
 "use client";
 
+import Link from "next/link";
+
 import { ContentForm, FormField, FormSelect } from "@/components/content-form";
 import { MediaUploadField } from "@/components/media-upload-field";
+import { Button } from "@/components/ui/button";
 import { usePlanCategories } from "@/hooks/use-admin-queries";
 
 type PlanFormProps = {
@@ -49,16 +52,21 @@ export function PlanFormFields({
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Chargement des catégories…</p>
       ) : (
-        <FormSelect
-          label="Catégorie"
-          name="category"
-          defaultValue={currentCategory}
-          required
-          options={categoryOptions.map((category) => ({
-            value: category.id,
-            label: category.labelFr,
-          }))}
-        />
+        <div className="space-y-2">
+          <FormSelect
+            label="Catégorie"
+            name="category"
+            defaultValue={currentCategory}
+            required
+            options={categoryOptions.map((category) => ({
+              value: category.id,
+              label: category.labelFr,
+            }))}
+          />
+          <Button asChild type="button" variant="outline" size="sm">
+            <Link href="/plan-categories">Gérer les catégories</Link>
+          </Button>
+        </div>
       )}
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" name="isPremium" defaultChecked={Boolean(defaultValues?.isPremium)} />

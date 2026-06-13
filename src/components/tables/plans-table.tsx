@@ -1,7 +1,10 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { Badge } from "@/components/ui/badge";
 import { DataTable, DataTableColumnHeader, type ColumnDef } from "@/components/ui/data-table";
+import { actionsColumn } from "@/lib/table-actions-column";
 
 export type BiblePlanRow = {
   id: string;
@@ -9,10 +12,19 @@ export type BiblePlanRow = {
   description: string | null;
   durationDays: number;
   category?: string;
+  isPremium?: boolean;
   thumbnailUrl?: string | null;
 };
 
-const columns: ColumnDef<BiblePlanRow>[] = [
+type PlansTableProps = {
+  data: BiblePlanRow[];
+  onEdit?: (row: BiblePlanRow) => void;
+  onDelete?: (row: BiblePlanRow) => void;
+  onManageDays?: (row: BiblePlanRow) => void;
+  deletingId?: string | null;
+};
+
+const baseColumns: ColumnDef<BiblePlanRow>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Nom" />,
@@ -36,6 +48,16 @@ const columns: ColumnDef<BiblePlanRow>[] = [
     },
   },
   {
+    accessorKey: "isPremium",
+    header: "Premium",
+    cell: ({ row }) =>
+      row.original.isPremium ? (
+        <Badge variant="default">Oui</Badge>
+      ) : (
+        <span className="text-muted-foreground">Non</span>
+      ),
+  },
+  {
     accessorKey: "thumbnailUrl",
     header: "Vignette",
     cell: ({ row }) => {
@@ -55,7 +77,31 @@ const columns: ColumnDef<BiblePlanRow>[] = [
   },
 ];
 
-export function PlansTable({ data }: { data: BiblePlanRow[] }) {
+export function PlansTable({ data, onEdit, onDelete, onManageDays, deletingId }: PlansTableProps) {
+  const columns = useMemo(() => {
+    if (!onEdit && !onDelete && !onManageDays) return baseColumns;
+
+    return [
+      ...baseColumns,
+      actionsColumn<BiblePlanRow>((row) => [
+        ...(onManageDays
+          ? [{ label: "Configurer les jours", onClick: () => onManageDays(row) }]
+          : []),
+        ...(onEdit ? [{ label: "Modifier", onClick: () => onEdit(row) }] : []),
+        ...(onDelete
+          ? [
+              {
+                label: deletingId === row.id ? "Suppression…" : "Supprimer",
+                onClick: () => onDelete(row),
+                variant: "destructive" as const,
+                disabled: deletingId === row.id,
+              },
+            ]
+          : []),
+      ]),
+    ];
+  }, [onEdit, onDelete, onManageDays, deletingId]);
+
   return (
     <DataTable
       columns={columns}

@@ -1,5 +1,6 @@
-import { adminApi, adminUploadApi } from "./client";
-import type { AppUser, PlanDay, Subscription, SubscriptionPlan, UploadResult } from "./types";
+import { adminApi } from "./client";
+import { ApiError } from "./client";
+import type { AppUser, PlanCategory, PlanDay, Subscription, SubscriptionPlan, UploadResult } from "./types";
 
 // Devotionals
 export async function fetchDevotionals() {
@@ -76,6 +77,20 @@ export async function deletePlan(id: string) {
   await adminApi.delete(`/plans/${id}`);
 }
 
+export async function fetchPlanCategoriesAdmin() {
+  const { data } = await adminApi.get<PlanCategory[]>("/plan-categories");
+  return data;
+}
+
+export async function createPlanCategory(body: unknown) {
+  const { data } = await adminApi.post<PlanCategory>("/plan-categories", body);
+  return data;
+}
+
+export async function deletePlanCategory(id: string) {
+  await adminApi.delete(`/plan-categories/${id}`);
+}
+
 export async function fetchPlanDays(planId: string) {
   const { data } = await adminApi.get<PlanDay[]>(`/plans/${planId}/days`);
   return data;
@@ -122,20 +137,28 @@ export async function fetchAppUsers() {
   return data;
 }
 
-// Uploads
+// Uploads — proxied through Next.js so auth + multipart work reliably in the browser.
+async function uploadViaProxy(path: string, file: File): Promise<UploadResult> {
+  const form = new FormData();
+  form.append("file", file);
+
+  const res = await fetch(path, { method: "POST", body: form });
+  const data = (await res.json().catch(() => ({}))) as UploadResult & { error?: string };
+
+  if (!res.ok) {
+    throw new ApiError(res.status, data.error ?? "Upload failed");
+  }
+
+  return data;
+}
+
 export async function uploadImage(
   file: File,
   folder: "plans" | "meditations" | "devotionals",
 ): Promise<UploadResult> {
-  const form = new FormData();
-  form.append("file", file);
-  const { data } = await adminUploadApi.post<UploadResult>(`/uploads/image?folder=${folder}`, form);
-  return data;
+  return uploadViaProxy(`/api/admin/upload/image?folder=${encodeURIComponent(folder)}`, file);
 }
 
 export async function uploadAudio(file: File): Promise<UploadResult> {
-  const form = new FormData();
-  form.append("file", file);
-  const { data } = await adminUploadApi.post<UploadResult>("/uploads/audio", form);
-  return data;
+  return uploadViaProxy("/api/admin/upload/audio", file);
 }

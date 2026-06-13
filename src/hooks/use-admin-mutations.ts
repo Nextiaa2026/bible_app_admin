@@ -9,8 +9,10 @@ import {
   meditationFromForm,
   planDayFromForm,
   planFromForm,
+  prayerFromForm,
   subscriptionPlanFromForm,
 } from "@/lib/form-data";
+import { planCategoryFromForm } from "@/lib/plan-category-form";
 import { toastError, toastSuccess } from "@/lib/toast";
 
 export function useCreateDevotional() {
@@ -47,6 +49,32 @@ export function useDeleteDevotional() {
       void qc.invalidateQueries({ queryKey: queryKeys.devotionals.all });
     },
     onError: (e) => toastError(e, "Impossible de supprimer la dévotion"),
+  });
+}
+
+export function useCreateDailyPrayer() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (formData: FormData) => adminApi.createDevotional(prayerFromForm(formData, "create")),
+    onSuccess: () => {
+      toastSuccess("Prière publiée");
+      void qc.invalidateQueries({ queryKey: queryKeys.devotionals.all });
+    },
+    onError: (e) => toastError(e, "Impossible de publier la prière"),
+  });
+}
+
+export function useUpdateDailyPrayer(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (formData: FormData) =>
+      adminApi.updateDevotional(id, prayerFromForm(formData, "update")),
+    onSuccess: () => {
+      toastSuccess("Prière mise à jour");
+      void qc.invalidateQueries({ queryKey: queryKeys.devotionals.all });
+      void qc.invalidateQueries({ queryKey: queryKeys.devotionals.detail(id) });
+    },
+    onError: (e) => toastError(e, "Impossible de mettre à jour la prière"),
   });
 }
 
@@ -121,6 +149,33 @@ export function useDeletePlan() {
       void qc.invalidateQueries({ queryKey: queryKeys.plans.all });
     },
     onError: (e) => toastError(e, "Impossible de supprimer le plan"),
+  });
+}
+
+export function useCreatePlanCategory() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (formData: FormData) =>
+      adminApi.createPlanCategory(planCategoryFromForm(formData)),
+    onSuccess: () => {
+      toastSuccess("Catégorie créée");
+      void qc.invalidateQueries({ queryKey: queryKeys.plans.categoriesAdmin });
+      void qc.invalidateQueries({ queryKey: queryKeys.plans.categories });
+    },
+    onError: (e) => toastError(e, "Impossible de créer la catégorie"),
+  });
+}
+
+export function useDeletePlanCategory() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => adminApi.deletePlanCategory(id),
+    onSuccess: () => {
+      toastSuccess("Catégorie supprimée");
+      void qc.invalidateQueries({ queryKey: queryKeys.plans.categoriesAdmin });
+      void qc.invalidateQueries({ queryKey: queryKeys.plans.categories });
+    },
+    onError: (e) => toastError(e, "Impossible de supprimer la catégorie"),
   });
 }
 

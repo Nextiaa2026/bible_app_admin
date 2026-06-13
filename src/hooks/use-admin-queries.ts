@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import * as adminApi from "@/lib/api/admin";
 import { queryKeys } from "@/lib/api/query-keys";
-import { fetchBibleVersions, fetchDashboardStats, fetchPlanCategories } from "@/lib/api/public";
+import { fetchBibleVersions, fetchDashboardStats } from "@/lib/api/public";
 
 export function useDashboardStats() {
   return useQuery({
@@ -54,9 +54,9 @@ export function usePlans() {
 
 export function usePlanCategories() {
   return useQuery({
-    queryKey: queryKeys.plans.categories,
-    queryFn: fetchPlanCategories,
-    staleTime: 1000 * 60 * 60,
+    queryKey: queryKeys.plans.categoriesAdmin,
+    queryFn: adminApi.fetchPlanCategoriesAdmin,
+    staleTime: 1000 * 60 * 5,
   });
 }
 

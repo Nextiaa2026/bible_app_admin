@@ -1,34 +1,33 @@
 import type { ReactNode } from "react";
 
 type AdminPageHeaderProps = {
-  title: string;
   description?: string;
   action?: ReactNode;
 };
 
-export function AdminPageHeader({ title, description, action }: AdminPageHeaderProps) {
+export function AdminPageHeader({ description, action }: AdminPageHeaderProps) {
+  if (!description && !action) return null;
+
   return (
-    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-        {description ? (
-          <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-        ) : null}
-      </div>
+    <div
+      className={`mb-6 flex flex-col gap-3 sm:flex-row sm:items-center ${
+        description && action ? "sm:justify-between" : action ? "sm:justify-end" : ""
+      }`}
+    >
+      {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
       {action}
     </div>
   );
 }
 
 export function AdminShell({
-  title,
   description,
   action,
   children,
-}: AdminPageHeaderProps & { children: ReactNode }) {
+}: AdminPageHeaderProps & { children: ReactNode; title?: string }) {
   return (
     <div className="mx-auto w-full max-w-7xl p-6 lg:p-8">
-      <AdminPageHeader title={title} description={description} action={action} />
+      <AdminPageHeader description={description} action={action} />
       {children}
     </div>
   );

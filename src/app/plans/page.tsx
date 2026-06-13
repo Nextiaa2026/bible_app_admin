@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 import { AdminShell } from "@/components/admin-shell";
@@ -7,7 +8,6 @@ import { PlanFormFields } from "@/components/forms/plan-form-fields";
 import { FormSheet } from "@/components/form-sheet";
 import { PlanDaysSheet } from "@/components/plan-days-sheet";
 import { QueryState } from "@/components/query-state";
-import { RowActions } from "@/components/row-actions";
 import { PlansTable, type BiblePlanRow } from "@/components/tables/plans-table";
 import { Button } from "@/components/ui/button";
 import { useCreatePlan, useDeletePlan, useUpdatePlan } from "@/hooks/use-admin-mutations";
@@ -61,33 +61,24 @@ export default function PlansPage() {
   return (
     <>
       <AdminShell
-        title="Plans bibliques"
         description={`${plans.length} plan(s)`}
-        action={<Button onClick={openCreate}>Nouveau plan</Button>}
+        action={
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline">
+              <Link href="/plan-categories">Catégories</Link>
+            </Button>
+            <Button onClick={openCreate}>Nouveau plan</Button>
+          </div>
+        }
       >
         <QueryState isLoading={isLoading} isError={isError} error={error}>
-          <PlansTable data={plans} />
-          <div className="mt-6 space-y-2">
-            {plans.map((p) => (
-              <div
-                key={p.id}
-                className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-card p-3 shadow-card"
-              >
-                <button
-                  type="button"
-                  onClick={() => openDays(p)}
-                  className="text-left text-sm font-medium text-primary hover:underline"
-                >
-                  {p.name}
-                </button>
-                <RowActions
-                  onEdit={() => openEdit(p.id)}
-                  onDelete={() => deleteMutation.mutate(p.id)}
-                  isDeleting={deleteMutation.isPending && deleteMutation.variables === p.id}
-                />
-              </div>
-            ))}
-          </div>
+          <PlansTable
+            data={plans}
+            onEdit={(row) => openEdit(row.id)}
+            onDelete={(row) => deleteMutation.mutate(row.id)}
+            onManageDays={openDays}
+            deletingId={deleteMutation.isPending ? (deleteMutation.variables as string) : null}
+          />
         </QueryState>
       </AdminShell>
 

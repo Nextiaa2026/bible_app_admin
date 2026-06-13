@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { ImageIcon, Loader2Icon, Music2Icon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useUploadAudio, useUploadImage } from "@/hooks/use-admin-mutations";
+import { ApiError } from "@/lib/api/client";
+import { useUploadState } from "@/providers/upload-provider";
 import { cn } from "@/lib/utils";
 
 type MediaUploadFieldProps = {
@@ -25,6 +26,7 @@ export function MediaUploadField({
   defaultUrl,
   defaultPublicId,
 }: MediaUploadFieldProps) {
+  const uploadKey = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const [url, setUrl] = useState(defaultUrl ?? "");
   const [publicId, setPublicId] = useState(defaultPublicId ?? "");
@@ -35,8 +37,14 @@ export function MediaUploadField({
 
   const uploadImage = useUploadImage(folder);
   const uploadAudio = useUploadAudio();
+  const { setUploading } = useUploadState();
 
   const loading = uploadImage.isPending || uploadAudio.isPending;
+
+  useEffect(() => {
+    setUploading(uploadKey, loading);
+    return () => setUploading(uploadKey, false);
+  }, [loading, setUploading, uploadKey]);
 
   useEffect(() => {
     setUrl(defaultUrl ?? "");
@@ -93,8 +101,14 @@ export function MediaUploadField({
       if (type === "image") {
         setPreviewUrl(result.url);
       }
-    } catch {
-      setUploadError("Échec de l'upload. Réessayez.");
+    } catch (error) {
+      const message =
+        error instanceof ApiError
+          ? error.message
+          : error instanceof Error
+            ? error.message
+            : "Échec de l'upload. Réessayez.";
+      setUploadError(message);
       if (type === "image" && !url) {
         clearBlobPreview();
         setPreviewUrl(defaultUrl ?? null);
@@ -158,13 +172,13 @@ export function MediaUploadField({
       )}
 
       <div className="flex flex-wrap items-center gap-2">
-        <Input
+        <input
           ref={inputRef}
           type="file"
           accept={type === "image" ? "image/*" : "audio/*"}
           onChange={handleFile}
           disabled={loading}
-          className="max-w-xs"
+          className="max-w-xs text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary/90"
         />
         {previewUrl || url ? (
           <Button

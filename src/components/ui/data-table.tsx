@@ -9,6 +9,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  type RowSelectionState,
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -24,6 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { selectColumn } from "@/lib/table-select-column";
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
@@ -31,30 +33,50 @@ type DataTableProps<TData, TValue> = {
   searchKey?: string;
   searchPlaceholder?: string;
   emptyMessage?: string;
+  enableRowSelection?: boolean;
+  getRowId?: (row: TData) => string;
 };
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id?: string }, TValue>({
   columns,
   data,
   searchKey,
   searchPlaceholder = "Rechercher…",
   emptyMessage = "Aucun résultat.",
+  enableRowSelection = true,
+  getRowId,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+
+  const tableColumns = React.useMemo(
+    () => (enableRowSelection ? [selectColumn<TData>(), ...columns] : columns),
+    [columns, enableRowSelection],
+  );
 
   const table = useReactTable({
     data,
-    columns,
+    columns: tableColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    state: { sorting, columnFilters },
+    onRowSelectionChange: setRowSelection,
+    enableRowSelection,
+    getRowId:
+      getRowId ??
+      ((row, index) => {
+        if (row.id) return row.id;
+        return String(index);
+      }),
+    state: { sorting, columnFilters, rowSelection },
     initialState: { pagination: { pageSize: 10 } },
   });
+
+  const selectedCount = table.getFilteredSelectedRowModel().rows.length;
 
   return (
     <div className="space-y-4">
@@ -73,7 +95,7 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className={header.id === "select" ? "w-10" : undefined}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.header, header.getContext())}
@@ -85,9 +107,9 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} data-state={row.getIsSelected() ? "selected" : undefined}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className={cell.column.id === "select" ? "w-10" : undefined}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -95,7 +117,10 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
+                <TableCell
+                  colSpan={tableColumns.length}
+                  className="h-24 text-center text-muted-foreground"
+                >
                   {emptyMessage}
                 </TableCell>
               </TableRow>
@@ -107,6 +132,7 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center justify-between gap-4">
         <p className="text-sm text-muted-foreground">
           {table.getFilteredRowModel().rows.length} ligne(s)
+          {selectedCount > 0 ? ` · ${selectedCount} sélectionnée(s)` : ""}
         </p>
         <div className="flex items-center gap-2">
           <Button

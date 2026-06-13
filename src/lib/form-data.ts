@@ -4,6 +4,27 @@ export function str(formData: FormData, key: string): string | null {
   return String(v);
 }
 
+export function prayerFromForm(formData: FormData, mode: "create" | "update") {
+  const date = String(formData.get("date") ?? "");
+  const prayerText = str(formData, "prayerText");
+  const scriptureReference = str(formData, "scriptureReference");
+  const scriptureText = str(formData, "scriptureText");
+
+  if (mode === "update") {
+    return { date, prayerText, scriptureReference, scriptureText };
+  }
+
+  return {
+    title: "Prière du jour",
+    body: prayerText ?? "",
+    date,
+    prayerText,
+    scriptureReference,
+    scriptureText,
+    versionCode: "LSG1910",
+  };
+}
+
 export function devotionalFromForm(formData: FormData) {
   return {
     title: formData.get("title"),

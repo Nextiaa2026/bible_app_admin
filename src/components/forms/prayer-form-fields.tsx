@@ -1,10 +1,9 @@
 "use client";
 
 import { ContentForm, FormField } from "@/components/content-form";
-import { MediaUploadField } from "@/components/media-upload-field";
 import { DatePicker } from "@/components/ui/date-picker";
 
-type DevotionalFormProps = {
+type PrayerFormProps = {
   onSubmit: (formData: FormData) => Promise<unknown>;
   isPending?: boolean;
   error?: string | null;
@@ -12,13 +11,13 @@ type DevotionalFormProps = {
   submitLabel?: string;
 };
 
-export function DevotionalFormFields({
+export function PrayerFormFields({
   onSubmit,
   isPending,
   error,
   defaultValues,
   submitLabel = "Enregistrer",
-}: DevotionalFormProps) {
+}: PrayerFormProps) {
   const today = new Date().toISOString().slice(0, 10);
 
   return (
@@ -27,14 +26,6 @@ export function DevotionalFormFields({
         label="Date"
         name="date"
         defaultValue={String(defaultValues?.date ?? today)}
-        required
-      />
-      <FormField label="Titre" name="title" defaultValue={String(defaultValues?.title ?? "")} required />
-      <FormField
-        label="Corps"
-        name="body"
-        as="textarea"
-        defaultValue={String(defaultValues?.body ?? "")}
         required
       />
       <FormField
@@ -52,24 +43,9 @@ export function DevotionalFormFields({
         label="Prière"
         name="prayerText"
         as="textarea"
-        defaultValue={String(defaultValues?.prayerText ?? "")}
+        defaultValue={String(defaultValues?.prayerText ?? defaultValues?.prayer ?? "")}
+        required
       />
-      <FormField
-        label="Version"
-        name="versionCode"
-        defaultValue={String(defaultValues?.versionCode ?? "LSG1910")}
-      />
-      <div>
-        <p className="mb-2 text-sm font-medium">Vignette</p>
-        <MediaUploadField
-          type="image"
-          folder="devotionals"
-          urlFieldName="thumbnailUrl"
-          publicIdFieldName="thumbnailPublicId"
-          defaultUrl={defaultValues?.thumbnailUrl as string | null}
-          defaultPublicId={defaultValues?.thumbnailPublicId as string | null}
-        />
-      </div>
     </ContentForm>
   );
 }

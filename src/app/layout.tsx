@@ -4,6 +4,7 @@ import { AdminLayoutShell } from "@/components/admin-layout-shell";
 import { AuthSessionProvider } from "@/components/session-provider";
 import { SonnerToaster } from "@/components/sonner-toaster";
 import { QueryProvider } from "@/providers/query-provider";
+import { UploadProvider } from "@/providers/upload-provider";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
@@ -24,8 +25,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-background">
         <AuthSessionProvider>
           <QueryProvider>
-            <AdminLayoutShell>{children}</AdminLayoutShell>
-            <SonnerToaster />
+            <UploadProvider>
+              <AdminLayoutShell>{children}</AdminLayoutShell>
+              <SonnerToaster />
+            </UploadProvider>
           </QueryProvider>
         </AuthSessionProvider>
       </body>

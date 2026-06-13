@@ -11,7 +11,6 @@ export default function UsersPage() {
 
   return (
     <AdminShell
-      title="Utilisateurs"
       description={`${users.length} utilisateur(s) · ${activeCount} abonnement(s) actif(s)`}
     >
       <QueryState isLoading={isLoading} isError={isError} error={error}>

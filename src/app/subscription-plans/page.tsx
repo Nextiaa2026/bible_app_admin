@@ -7,6 +7,7 @@ import { AdminShell } from "@/components/admin-shell";
 import { ContentForm, FormField } from "@/components/content-form";
 import { FormSheet } from "@/components/form-sheet";
 import { QueryState } from "@/components/query-state";
+import { SubscriptionPlansTable } from "@/components/tables/subscription-plans-table";
 import { Button } from "@/components/ui/button";
 import { useCreateSubscriptionPlan } from "@/hooks/use-admin-mutations";
 import { useSubscriptionPlans } from "@/hooks/use-admin-queries";
@@ -24,25 +25,11 @@ export default function SubscriptionPlansPage() {
   return (
     <>
       <AdminShell
-        title="Tarifs d'abonnement"
         description={`${plans.length} formule(s)`}
-        action={
-          <Button onClick={() => setSheetOpen(true)}>
-            Nouvelle formule
-          </Button>
-        }
+        action={<Button onClick={() => setSheetOpen(true)}>Nouvelle formule</Button>}
       >
         <QueryState isLoading={isLoading} isError={isError} error={error}>
-          <div className="space-y-2">
-            {plans.map((p) => (
-              <div key={p.id} className="rounded-lg border bg-card p-4 shadow-card">
-                <p className="font-medium">{p.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {p.priceXaf} XAF · {p.durationDays} jours · {p.isActive ? "active" : "inactive"}
-                </p>
-              </div>
-            ))}
-          </div>
+          <SubscriptionPlansTable data={plans} />
         </QueryState>
 
         <Button asChild className="mt-4" variant="outline">

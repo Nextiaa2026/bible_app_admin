@@ -6,7 +6,6 @@ import { AdminShell } from "@/components/admin-shell";
 import { MeditationFormFields } from "@/components/forms/meditation-form-fields";
 import { FormSheet } from "@/components/form-sheet";
 import { QueryState } from "@/components/query-state";
-import { RowActions } from "@/components/row-actions";
 import { MeditationsTable, type MeditationRow } from "@/components/tables/meditations-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,31 +50,16 @@ export default function MeditationsPage() {
   return (
     <>
       <AdminShell
-        title="Méditations"
         description={`${items.length} méditation(s)`}
-        action={
-          <Button onClick={openCreate}>
-            Nouvelle méditation
-          </Button>
-        }
+        action={<Button onClick={openCreate}>Nouvelle méditation</Button>}
       >
         <QueryState isLoading={isLoading} isError={isError} error={error}>
-          <MeditationsTable data={items} />
-          <div className="mt-6 space-y-2">
-            {items.map((row) => (
-              <div
-                key={row.id}
-                className="flex items-center justify-between rounded-lg border bg-card p-3 shadow-card"
-              >
-                <span className="text-sm font-medium">{row.title}</span>
-                <RowActions
-                  onEdit={() => openEdit(row.id)}
-                  onDelete={() => deleteMutation.mutate(row.id)}
-                  isDeleting={deleteMutation.isPending && deleteMutation.variables === row.id}
-                />
-              </div>
-            ))}
-          </div>
+          <MeditationsTable
+            data={items}
+            onEdit={(row) => openEdit(row.id)}
+            onDelete={(row) => deleteMutation.mutate(row.id)}
+            deletingId={deleteMutation.isPending ? (deleteMutation.variables as string) : null}
+          />
         </QueryState>
       </AdminShell>
 

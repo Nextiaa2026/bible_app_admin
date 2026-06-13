@@ -5,33 +5,27 @@ import { useMemo } from "react";
 import { DataTable, DataTableColumnHeader, type ColumnDef } from "@/components/ui/data-table";
 import { actionsColumn } from "@/lib/table-actions-column";
 
-export type DevotionalRow = {
+export type PrayerRow = {
   id: string;
-  title: string;
-  body: string;
   date: string;
+  prayerText?: string | null;
+  prayer?: string | null;
   scriptureReference?: string | null;
   scriptureText?: string | null;
-  prayer?: string | null;
-  prayerText?: string | null;
+  title?: string;
 };
 
-type DevotionalsTableProps = {
-  data: DevotionalRow[];
-  onEdit?: (row: DevotionalRow) => void;
-  onDelete?: (row: DevotionalRow) => void;
+type PrayersTableProps = {
+  data: PrayerRow[];
+  onEdit?: (row: PrayerRow) => void;
+  onDelete?: (row: PrayerRow) => void;
   deletingId?: string | null;
 };
 
-const baseColumns: ColumnDef<DevotionalRow>[] = [
+const baseColumns: ColumnDef<PrayerRow>[] = [
   {
     accessorKey: "date",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,
-  },
-  {
-    accessorKey: "title",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Titre" />,
-    cell: ({ row }) => <span className="font-medium">{row.getValue("title")}</span>,
   },
   {
     accessorKey: "scriptureReference",
@@ -48,37 +42,25 @@ const baseColumns: ColumnDef<DevotionalRow>[] = [
     ),
   },
   {
-    accessorKey: "body",
-    header: "Corps",
+    accessorKey: "prayerText",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Prière" />,
     cell: ({ row }) => (
-      <span className="line-clamp-2 max-w-lg text-muted-foreground">
-        {row.getValue("body") as string}
-      </span>
-    ),
-  },
-  {
-    id: "prayer",
-    header: "Prière",
-    cell: ({ row }) => (
-      <span className="line-clamp-2 max-w-md text-muted-foreground">
-        {row.original.prayerText ?? row.original.prayer ?? "—"}
+      <span className="line-clamp-3 max-w-2xl text-muted-foreground">
+        {(row.getValue("prayerText") as string | null) ||
+          row.original.prayer ||
+          "—"}
       </span>
     ),
   },
 ];
 
-export function DevotionalsTable({
-  data,
-  onEdit,
-  onDelete,
-  deletingId,
-}: DevotionalsTableProps) {
+export function PrayersTable({ data, onEdit, onDelete, deletingId }: PrayersTableProps) {
   const columns = useMemo(() => {
     if (!onEdit && !onDelete) return baseColumns;
 
     return [
       ...baseColumns,
-      actionsColumn<DevotionalRow>((row) => [
+      actionsColumn<PrayerRow>((row) => [
         ...(onEdit ? [{ label: "Modifier", onClick: () => onEdit(row) }] : []),
         ...(onDelete
           ? [
@@ -98,9 +80,9 @@ export function DevotionalsTable({
     <DataTable
       columns={columns}
       data={data}
-      searchKey="title"
-      searchPlaceholder="Filtrer par titre…"
-      emptyMessage="Aucune dévotion pour aujourd'hui."
+      searchKey="prayerText"
+      searchPlaceholder="Filtrer par texte…"
+      emptyMessage="Aucune prière publiée."
     />
   );
 }
