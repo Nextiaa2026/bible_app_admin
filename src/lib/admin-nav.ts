@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   Sparkles,
   Tag,
+  Target,
   Users,
 } from "lucide-react";
 
@@ -23,6 +24,7 @@ export const adminNavLinks: AdminNavLink[] = [
   { href: "/prayers", label: "Prières", icon: HandHeart },
   { href: "/devotionals", label: "Dévotions", icon: Sparkles },
   { href: "/plans", label: "Plans bibliques", icon: CalendarDays },
+  { href: "/expectations", label: "Attentes", icon: Target },
   { href: "/plan-categories", label: "Catégories plans", icon: FolderTree },
   { href: "/meditations", label: "Méditations", icon: Headphones },
   { href: "/users", label: "Utilisateurs", icon: Users },

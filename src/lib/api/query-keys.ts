@@ -10,6 +10,10 @@ export const queryKeys = {
     all: ["meditations"] as const,
     detail: (id: string) => ["meditations", id] as const,
   },
+  expectations: {
+    all: ["expectations"] as const,
+    detail: (id: string) => ["expectations", id] as const,
+  },
   plans: {
     all: ["plans"] as const,
     categories: ["plans", "categories"] as const,

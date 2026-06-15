@@ -83,6 +83,34 @@ export function planDayFromForm(formData: FormData) {
   };
 }
 
+export function expectationFromForm(formData: FormData, mode: "create" | "update") {
+  const verses = JSON.parse(String(formData.get("verses") || "[]"));
+  const sortOrderRaw = formData.get("sortOrder");
+  const sortOrder =
+    sortOrderRaw != null && String(sortOrderRaw) !== "" ? Number(sortOrderRaw) : undefined;
+
+  const body = {
+    labelFr: String(formData.get("labelFr") ?? ""),
+    labelEn: String(formData.get("labelEn") ?? ""),
+    descriptionFr: str(formData, "descriptionFr"),
+    descriptionEn: str(formData, "descriptionEn"),
+    planCategoryTag: str(formData, "planCategoryTag"),
+    estimatedMinutes: Number(formData.get("estimatedMinutes") ?? 15),
+    thumbnailUrl: str(formData, "thumbnailUrl"),
+    thumbnailPublicId: str(formData, "thumbnailPublicId"),
+    iconKey: str(formData, "iconKey"),
+    sortOrder,
+    isActive: formData.get("isActive") === "on",
+    verses,
+  };
+
+  if (mode === "create") {
+    return { id: String(formData.get("id") ?? ""), ...body };
+  }
+
+  return body;
+}
+
 export function subscriptionPlanFromForm(formData: FormData) {
   return {
     name: formData.get("name"),

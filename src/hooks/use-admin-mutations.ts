@@ -6,6 +6,7 @@ import * as adminApi from "@/lib/api/admin";
 import { queryKeys } from "@/lib/api/query-keys";
 import {
   devotionalFromForm,
+  expectationFromForm,
   meditationFromForm,
   planDayFromForm,
   planFromForm,
@@ -112,6 +113,45 @@ export function useDeleteMeditation() {
       void qc.invalidateQueries({ queryKey: queryKeys.meditations.all });
     },
     onError: (e) => toastError(e, "Impossible de supprimer la méditation"),
+  });
+}
+
+export function useCreateExpectation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (formData: FormData) =>
+      adminApi.createExpectation(expectationFromForm(formData, "create")),
+    onSuccess: () => {
+      toastSuccess("Attente créée");
+      void qc.invalidateQueries({ queryKey: queryKeys.expectations.all });
+    },
+    onError: (e) => toastError(e, "Impossible de créer l'attente"),
+  });
+}
+
+export function useUpdateExpectation(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (formData: FormData) =>
+      adminApi.updateExpectation(id, expectationFromForm(formData, "update")),
+    onSuccess: () => {
+      toastSuccess("Attente mise à jour");
+      void qc.invalidateQueries({ queryKey: queryKeys.expectations.all });
+      void qc.invalidateQueries({ queryKey: queryKeys.expectations.detail(id) });
+    },
+    onError: (e) => toastError(e, "Impossible de mettre à jour l'attente"),
+  });
+}
+
+export function useDeleteExpectation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => adminApi.deleteExpectation(id),
+    onSuccess: () => {
+      toastSuccess("Attente supprimée");
+      void qc.invalidateQueries({ queryKey: queryKeys.expectations.all });
+    },
+    onError: (e) => toastError(e, "Impossible de supprimer l'attente"),
   });
 }
 
@@ -240,7 +280,7 @@ export function useCreateSubscriptionPlan() {
   });
 }
 
-export function useUploadImage(folder: "plans" | "meditations" | "devotionals") {
+export function useUploadImage(folder: "plans" | "meditations" | "devotionals" | "expectations") {
   return useMutation({
     mutationFn: (file: File) => adminApi.uploadImage(file, folder),
     onSuccess: () => toastSuccess("Image uploadée"),

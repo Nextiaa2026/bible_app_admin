@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 type MediaUploadFieldProps = {
   type: "image" | "audio";
-  folder?: "plans" | "meditations" | "devotionals";
+  folder?: "plans" | "meditations" | "devotionals" | "expectations";
   urlFieldName: string;
   publicIdFieldName: string;
   defaultUrl?: string | null;

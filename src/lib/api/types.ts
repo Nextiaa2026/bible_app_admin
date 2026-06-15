@@ -65,3 +65,29 @@ export type DashboardStats = {
   meditations: number;
   versions: number;
 };
+
+export type ExpectationVerse = {
+  id: string;
+  sortOrder: number;
+  referenceFr: string;
+  referenceEn: string | null;
+  excerptFr: string;
+  excerptEn: string | null;
+  tagFr: string | null;
+  tagEn: string | null;
+};
+
+export type Expectation = {
+  id: string;
+  labelFr: string;
+  labelEn: string;
+  descriptionFr: string | null;
+  descriptionEn: string | null;
+  planCategoryTag: string | null;
+  estimatedMinutes: number;
+  thumbnailUrl: string | null;
+  iconKey: string | null;
+  sortOrder: number;
+  isActive: boolean;
+  verses: ExpectationVerse[];
+};

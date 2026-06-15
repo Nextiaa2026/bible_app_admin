@@ -45,6 +45,21 @@ export function useMeditation(id: string) {
   });
 }
 
+export function useExpectations() {
+  return useQuery({
+    queryKey: queryKeys.expectations.all,
+    queryFn: adminApi.fetchExpectations,
+  });
+}
+
+export function useExpectation(id: string) {
+  return useQuery({
+    queryKey: queryKeys.expectations.detail(id),
+    queryFn: () => adminApi.fetchExpectation(id),
+    enabled: !!id,
+  });
+}
+
 export function usePlans() {
   return useQuery({
     queryKey: queryKeys.plans.all,

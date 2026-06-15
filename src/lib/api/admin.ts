@@ -1,6 +1,14 @@
 import { adminApi } from "./client";
 import { ApiError } from "./client";
-import type { AppUser, PlanCategory, PlanDay, Subscription, SubscriptionPlan, UploadResult } from "./types";
+import type {
+  AppUser,
+  Expectation,
+  PlanCategory,
+  PlanDay,
+  Subscription,
+  SubscriptionPlan,
+  UploadResult,
+} from "./types";
 
 // Devotionals
 export async function fetchDevotionals() {
@@ -50,6 +58,31 @@ export async function updateMeditation(id: string, body: unknown) {
 
 export async function deleteMeditation(id: string) {
   await adminApi.delete(`/meditations/${id}`);
+}
+
+// Expectations (onboarding spiritual goals)
+export async function fetchExpectations() {
+  const { data } = await adminApi.get<Expectation[]>("/expectations");
+  return data;
+}
+
+export async function fetchExpectation(id: string) {
+  const { data } = await adminApi.get<Expectation>(`/expectations/${id}`);
+  return data;
+}
+
+export async function createExpectation(body: unknown) {
+  const { data } = await adminApi.post<Expectation>("/expectations", body);
+  return data;
+}
+
+export async function updateExpectation(id: string, body: unknown) {
+  const { data } = await adminApi.patch<Expectation>(`/expectations/${id}`, body);
+  return data;
+}
+
+export async function deleteExpectation(id: string) {
+  await adminApi.delete(`/expectations/${id}`);
 }
 
 // Plans
@@ -154,7 +187,7 @@ async function uploadViaProxy(path: string, file: File): Promise<UploadResult> {
 
 export async function uploadImage(
   file: File,
-  folder: "plans" | "meditations" | "devotionals",
+  folder: "plans" | "meditations" | "devotionals" | "expectations",
 ): Promise<UploadResult> {
   return uploadViaProxy(`/api/admin/upload/image?folder=${encodeURIComponent(folder)}`, file);
 }
