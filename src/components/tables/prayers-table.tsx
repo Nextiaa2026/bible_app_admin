@@ -13,6 +13,7 @@ export type PrayerRow = {
   scriptureReference?: string | null;
   scriptureText?: string | null;
   title?: string;
+  thumbnailUrl?: string | null;
 };
 
 type PrayersTableProps = {
@@ -23,6 +24,19 @@ type PrayersTableProps = {
 };
 
 const baseColumns: ColumnDef<PrayerRow>[] = [
+  {
+    accessorKey: "thumbnailUrl",
+    header: "Vignette",
+    cell: ({ row }) => {
+      const url = row.getValue("thumbnailUrl") as string | null | undefined;
+      return url ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={url} alt="" className="h-8 w-8 rounded-lg object-cover" />
+      ) : (
+        <span className="text-muted-foreground">—</span>
+      );
+    },
+  },
   {
     accessorKey: "date",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,

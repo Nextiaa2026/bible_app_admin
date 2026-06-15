@@ -1,6 +1,7 @@
 "use client";
 
 import { ContentForm, FormField } from "@/components/content-form";
+import { MediaUploadField } from "@/components/media-upload-field";
 import { DatePicker } from "@/components/ui/date-picker";
 
 type PrayerFormProps = {
@@ -46,6 +47,17 @@ export function PrayerFormFields({
         defaultValue={String(defaultValues?.prayerText ?? defaultValues?.prayer ?? "")}
         required
       />
+      <div>
+        <p className="mb-2 text-sm font-medium">Vignette</p>
+        <MediaUploadField
+          type="image"
+          folder="devotionals"
+          urlFieldName="thumbnailUrl"
+          publicIdFieldName="thumbnailPublicId"
+          defaultUrl={defaultValues?.thumbnailUrl as string | null}
+          defaultPublicId={defaultValues?.thumbnailPublicId as string | null}
+        />
+      </div>
     </ContentForm>
   );
 }

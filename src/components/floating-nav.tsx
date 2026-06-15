@@ -28,7 +28,7 @@ export function FloatingNav() {
                 className={cn(
                   "flex size-10 items-center justify-center rounded-xl transition-colors",
                   active
-                    ? "bg-primary text-primary-foreground shadow-sm"
+                    ? "bg-surface-dark text-gold shadow-sm"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 )}
               >

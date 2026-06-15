@@ -9,9 +9,18 @@ export function prayerFromForm(formData: FormData, mode: "create" | "update") {
   const prayerText = str(formData, "prayerText");
   const scriptureReference = str(formData, "scriptureReference");
   const scriptureText = str(formData, "scriptureText");
+  const thumbnailUrl = str(formData, "thumbnailUrl");
+  const thumbnailPublicId = str(formData, "thumbnailPublicId");
 
   if (mode === "update") {
-    return { date, prayerText, scriptureReference, scriptureText };
+    return {
+      date,
+      prayerText,
+      scriptureReference,
+      scriptureText,
+      thumbnailUrl,
+      thumbnailPublicId,
+    };
   }
 
   return {
@@ -22,6 +31,8 @@ export function prayerFromForm(formData: FormData, mode: "create" | "update") {
     scriptureReference,
     scriptureText,
     versionCode: "LSG1910",
+    thumbnailUrl,
+    thumbnailPublicId,
   };
 }
 

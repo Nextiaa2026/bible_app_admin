@@ -13,32 +13,36 @@
   }
 
   :root {
-    --background: 258 30% 97%;
+    --background: 40 33% 98%;
     --foreground: 258 25% 15%;
     --card: 0 0% 100%;
     --card-foreground: 258 25% 15%;
     --popover: 0 0% 100%;
     --popover-foreground: 258 25% 15%;
-    --primary: 258 41% 58%;
+    --primary: 288 52% 54%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 258 35% 96%;
-    --secondary-foreground: 258 30% 30%;
-    --muted: 258 20% 96%;
+    --secondary: 288 30% 94%;
+    --secondary-foreground: 288 25% 28%;
+    --muted: 40 20% 94%;
     --muted-foreground: 258 10% 45%;
-    --accent: 258 30% 96%;
-    --accent-foreground: 258 41% 45%;
+    --accent: 288 40% 92%;
+    --accent-foreground: 288 52% 42%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 258 15% 90%;
-    --input: 258 15% 90%;
-    --ring: 258 41% 58%;
-    --surface-dark: 258 22% 16%;
+    --border: 288 15% 88%;
+    --input: 288 15% 88%;
+    --ring: 12 86% 62%;
+    --surface-dark: 258 30% 12%;
+    --cta: 12 86% 62%;
+    --cta-foreground: 0 0% 100%;
+    --gold: 43 74% 55%;
+    --gold-foreground: 258 30% 12%;
     --radius: 0.5rem;
-    --chart-1: 258 41% 58%;
-    --chart-2: 258 35% 70%;
-    --chart-3: 258 25% 45%;
-    --chart-4: 258 20% 35%;
-    --chart-5: 258 15% 25%;
+    --chart-1: 288 52% 54%;
+    --chart-2: 288 40% 68%;
+    --chart-3: 288 30% 45%;
+    --chart-4: 288 25% 35%;
+    --chart-5: 288 20% 25%;
   }
 
   .dark {
@@ -48,20 +52,24 @@
     --card-foreground: 0 0% 98%;
     --popover: 258 18% 12%;
     --popover-foreground: 0 0% 98%;
-    --primary: 258 45% 68%;
+    --primary: 288 55% 62%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 258 15% 18%;
-    --secondary-foreground: 258 20% 90%;
+    --secondary: 288 20% 18%;
+    --secondary-foreground: 288 20% 90%;
     --muted: 258 12% 16%;
     --muted-foreground: 258 10% 60%;
-    --accent: 258 25% 20%;
-    --accent-foreground: 258 45% 75%;
+    --accent: 288 25% 20%;
+    --accent-foreground: 288 55% 72%;
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
     --border: 258 12% 20%;
     --input: 258 12% 20%;
-    --ring: 258 45% 68%;
+    --ring: 12 80% 58%;
     --surface-dark: 258 20% 10%;
+    --cta: 12 80% 58%;
+    --cta-foreground: 0 0% 100%;
+    --gold: 43 70% 52%;
+    --gold-foreground: 258 30% 12%;
   }
 
   * {
